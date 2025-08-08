@@ -11,19 +11,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Clone the repozitory
-      uses: actions/chekout@v3
+    - name: Checkout repozitory
+      uses: actions/cheсkout@v3
 
-    - name: Install Python
+    - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.11'
+        python-version: '3.12'
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
+        pip install -r requirements.txt
         pip install flake8
 
-    - name: Running the linter
+    - name: Run linter
       run: |
         flake8 .
+
+    - name: Run Django tests
+      run: |
+        python manage.py test
