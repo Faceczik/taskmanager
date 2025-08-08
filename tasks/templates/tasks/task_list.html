@@ -1,0 +1,36 @@
+{% extends 'tasks/base.html' %}
+
+{% block content %}
+    <h1>Your Tasks</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Add Task</button>
+        
+    </form>
+
+    <p>Show:
+            <a href="?filter=all">All</a> |
+            <a href="?filter=active">Active</a> |
+            <a href="?filter=completed">Completed</a>
+    </p>
+
+    <ul>
+        {% for task in tasks %}
+            <li>
+                {% if task.is_completed %}
+                    <s>{{ task.title }}</s> (Done)
+                    <a href="{% url 'toggle_task' task.pk %}">🔁 Undo</a>
+                {% else %}
+                    {{ task.title }}
+                    <a href="{% url 'toggle_task' task.pk %}">✅ Done</a>
+                {% endif %}
+                <a href="{% url 'delete_task' task.pk %}">🗑️ Delete</a>
+                <a href="{% url 'edit_task' task.pk %}">✏️ Edit</a>
+            </li>
+        {% empty %}
+            <li>No tasks yet.</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
