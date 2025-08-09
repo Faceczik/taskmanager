@@ -5,6 +5,7 @@ from .forms import RegisterForm
 from .models import Task
 from .forms import TaskForm
 
+
 @login_required
 def edit_task(request, pk):
     task = get_object_or_404(Task, pk=pk, user=request.user)
@@ -15,7 +16,9 @@ def edit_task(request, pk):
             return redirect('task_list')
     else:
         form = TaskForm(instance=task)
-    return render(request, 'tasks/edit_task.html', {'form': form, 'task': task})
+    return render(request, 'tasks/edit_task.html',
+                   {'form': form, 'task': task})
+
 
 def register_view(request):
     if request.method == 'POST':
@@ -28,16 +31,19 @@ def register_view(request):
         form = RegisterForm()
     return render(request, 'tasks/register.html', {'form': form})
 
+
 def delete_task(request, pk):
     task = get_object_or_404(Task, pk=pk, user=request.user)
     task.delete()
     return redirect('task_list')
 
+
 def toggle_task(request, pk):
-    task = get_object_or_404(Task,pk=pk, user=request.user)
+    task = get_object_or_404(Task, pk=pk, user=request.user)
     task.is_completed = not task.is_completed
     task.save()
     return redirect('task_list')
+
 
 @login_required
 def task_list(request):
@@ -59,4 +65,5 @@ def task_list(request):
             task.save()
             return redirect('task_list')
 
-    return render(request, 'tasks/task_list.html', {'form': form, 'tasks': tasks})
+    return render(request, 'tasks/task_list.html',
+                   {'form': form, 'tasks': tasks})
